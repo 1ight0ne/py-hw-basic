@@ -72,12 +72,17 @@ class Reviewer(Mentor):
         else:
             return 'Ошибка! Оценка не доступна'
 
-def avr_grade(cls_with_grade):
-    if isinstance(cls_with_grade, Student) or isinstance(cls_with_grade, Lecturer):
-        list_avg_grade = list(map(lambda el: sum(el)/len(el), cls_with_grade.grades.values()))
-        return sum(list_avg_grade)/len(list_avg_grade)
-    else:
-        return f'Ошибка! Расчет не доступен'
+def avr_grade(person, course='all'):
+    if isinstance(person, Student) or isinstance(person, Lecturer):
+        if course == 'all':
+            list_avg_grade = list(map(lambda el: sum(el)/len(el), person.grades.values()))
+            return sum(list_avg_grade)/len(list_avg_grade)
+        elif course in person.grades:
+            return sum(person.grades[course])/len(person.grades[course])
+    return f'Ошибка! Расчет не доступен'
+
+def multi_avr_grade(course, *persons):
+    pass
 
 def main():
     best_student = Student('Ruoy', 'Eman', 'male')
@@ -90,6 +95,7 @@ def main():
 
     some_reviewer = Reviewer('Some', 'Buddy')
     some_reviewer.courses_attached += ['Python']
+    some_reviewer.courses_attached += ['Git']
     
     some_lecturer = Lecturer('John', 'Smith')
     some_lecturer.courses_attached += ['Python']
@@ -98,21 +104,18 @@ def main():
     best_student.rate_lecture(some_lecturer, 'Python', 9)
     poor_student.rate_lecture(some_lecturer, 'Git', 9)
 
-    some_reviewer.rate_hw(best_student, 'Python', 10)
-    some_reviewer.rate_hw(best_student, 'Python', 10)
-    some_reviewer.rate_hw(best_student, 'Python', 9)
-
-    some_reviewer.rate_hw(best_student, 'Git', 7)
-    some_reviewer.rate_hw(best_student, 'Git', 9)
-    some_reviewer.rate_hw(best_student, 'Git', 10)
-
-    some_reviewer.rate_hw(poor_student, 'Python', 9)
-    some_reviewer.rate_hw(poor_student, 'Python', 7)
-    some_reviewer.rate_hw(poor_student, 'Python', 9)
-
-    some_reviewer.rate_hw(poor_student, 'Git', 7)
-    some_reviewer.rate_hw(poor_student, 'Git', 6)
-    some_reviewer.rate_hw(poor_student, 'Git', 10)
+    print(some_reviewer.rate_hw(best_student, 'Python', 10))
+    print(some_reviewer.rate_hw(best_student, 'Python', 10))
+    print(some_reviewer.rate_hw(best_student, 'Python', 9))
+    print(some_reviewer.rate_hw(best_student, 'Git', 7))
+    print(some_reviewer.rate_hw(best_student, 'Git', 9))
+    print(some_reviewer.rate_hw(best_student, 'Git', 10))
+    print(some_reviewer.rate_hw(poor_student, 'Python', 9))
+    print(some_reviewer.rate_hw(poor_student, 'Python', 7))
+    print(some_reviewer.rate_hw(poor_student, 'Python', 9))
+    print(some_reviewer.rate_hw(poor_student, 'Git', 7))
+    print(some_reviewer.rate_hw(poor_student, 'Git', 6))
+    print(some_reviewer.rate_hw(poor_student, 'Git', 10))
 
     print(f'Оценки студента {best_student.name} {best_student.surname} за курс Python {best_student.grades["Python"]}')
     print(f'Оценки лектора {some_lecturer.name} {some_lecturer.surname} за курс Python {some_lecturer.grades["Python"]}')
@@ -121,6 +124,8 @@ def main():
     print(best_student)
     print(poor_student)
     print(best_student < poor_student)
+    print(avr_grade(best_student, course='Git'))
+    print(avr_grade(poor_student, course='Git'))
 
 if __name__ == "__main__":
   main()
