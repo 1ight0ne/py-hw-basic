@@ -79,15 +79,24 @@ def avr_grade(person, course='all'):
             return sum(list_avg_grade)/len(list_avg_grade)
         elif course in person.grades:
             return sum(person.grades[course])/len(person.grades[course])
-    return f'Ошибка! Расчет не доступен'
+        else:
+            return 0
+    return 'Ошибка! Расчет не доступен'
 
 def multi_avr_grade(course, *persons):
-    pass
+    sum = 0
+    count = len(persons)
+    for person in persons:
+        sum += avr_grade(person, course)
+        if avr_grade(person, course) == 0:
+            count -= 1
+    return sum/count
 
 def main():
     best_student = Student('Ruoy', 'Eman', 'male')
     best_student.courses_in_progress += ['Python']
     best_student.courses_in_progress += ['Git']
+    
     poor_student = Student('Albert', 'Epstein', 'male')
     poor_student.courses_in_progress += ['Python']
     poor_student.courses_in_progress += ['Git']
@@ -96,13 +105,18 @@ def main():
     some_reviewer = Reviewer('Some', 'Buddy')
     some_reviewer.courses_attached += ['Python']
     some_reviewer.courses_attached += ['Git']
-    
+
     some_lecturer = Lecturer('John', 'Smith')
     some_lecturer.courses_attached += ['Python']
+    new_lecturer = Lecturer('Nick', 'Jenkins')
+    new_lecturer.courses_attached += ['Git']
 
-    best_student.rate_lecture(some_lecturer, 'Python', 10) 
-    best_student.rate_lecture(some_lecturer, 'Python', 9)
-    poor_student.rate_lecture(some_lecturer, 'Git', 9)
+    print(best_student.rate_lecture(some_lecturer, 'Python', 10))
+    print(best_student.rate_lecture(some_lecturer, 'Python', 9))
+    print(poor_student.rate_lecture(some_lecturer, 'Git', 9))
+    print(poor_student.rate_lecture(new_lecturer, 'Git', 9))
+    print(best_student.rate_lecture(new_lecturer, 'Git', 10))
+    print(poor_student.rate_lecture(some_lecturer, 'Python', 5))
 
     print(some_reviewer.rate_hw(best_student, 'Python', 10))
     print(some_reviewer.rate_hw(best_student, 'Python', 10))
@@ -117,15 +131,18 @@ def main():
     print(some_reviewer.rate_hw(poor_student, 'Git', 6))
     print(some_reviewer.rate_hw(poor_student, 'Git', 10))
 
-    print(f'Оценки студента {best_student.name} {best_student.surname} за курс Python {best_student.grades["Python"]}')
-    print(f'Оценки лектора {some_lecturer.name} {some_lecturer.surname} за курс Python {some_lecturer.grades["Python"]}')
+    print(f'Оценки студента {best_student.name} {best_student.surname} за курс Python {best_student.grades["Python"]}\n')
+    print(f'Оценки лектора {some_lecturer.name} {some_lecturer.surname} за курс Python {some_lecturer.grades["Python"]}\n')
     print(some_lecturer)
+    print(new_lecturer)
     print(some_reviewer)
     print(best_student)
     print(poor_student)
     print(best_student < poor_student)
-    print(avr_grade(best_student, course='Git'))
-    print(avr_grade(poor_student, course='Git'))
+    print(avr_grade(best_student, course='Python'))
+    print(avr_grade(poor_student, course='Python'))
+    print(multi_avr_grade('Python', best_student, poor_student))
+    print(multi_avr_grade('Python', some_lecturer, new_lecturer))
 
 if __name__ == "__main__":
   main()
