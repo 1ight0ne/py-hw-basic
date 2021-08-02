@@ -1,4 +1,4 @@
-class Grades_cmp:
+class GradesCmp:
     def __eq__(self, other):
         return avr_grade(self) == avr_grade(other)
 
@@ -17,7 +17,7 @@ class Grades_cmp:
     def __ge__(self, other):
         return avr_grade(self) >= avr_grade(other)
 
-class Student(Grades_cmp):
+class Student(GradesCmp):
     def __init__(self, name, surname, gender):
         self.name = name
         self.surname = surname
@@ -52,7 +52,7 @@ class Mentor:
         rtn = f'Имя: {self.name}\nФамилия: {self.surname}\n'
         return rtn
 
-class Lecturer(Mentor, Grades_cmp):
+class Lecturer(Mentor, GradesCmp):
     def __init__(self, name, surname):
         super().__init__(name, surname)
         self.grades = {}
