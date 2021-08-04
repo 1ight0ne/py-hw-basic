@@ -54,7 +54,7 @@ def concat_files(files_count, *files):
                 f.writelines(file['content'] )
         return 'Успех!'
     else:
-        return f'Ошибка! указано неверное количество фалов'
+        return f'Ошибка! указано неверное количество файлов'
 
 if __name__ == '__main__':
     cook_book = read_cookbook()
